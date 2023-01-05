@@ -1,3 +1,5 @@
+<!-- Hello there -->
+
 <h1 align="center">
   Wing IDE Pro Keygen GUI 🔑
 </h1>
@@ -10,6 +12,10 @@
   <br/>
   Supported major versions: 5, 6, 7, 8, and 9
 </h4>
+
+<div style="text-align: center;">
+    <img title="Wing Keygen GUI" alt="Example GUI screenshot" src="./assets/gui-example.png">
+</div>
 
 ## ⚠️ Disclaimer
 
@@ -29,3 +35,4 @@ cd wing-ide-keygen-gui
 python -m pip install -r requirements.txt
 python ./src/main.py
 ```
+
