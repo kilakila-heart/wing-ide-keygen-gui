@@ -1,0 +1,4 @@
+# GUI library
+customtkinter>=5.0.3
+# dependency of customtkinter: automatic dark/light mode based on system settings
+darkdetect>=0.8.0
