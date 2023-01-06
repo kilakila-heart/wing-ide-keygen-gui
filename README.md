@@ -4,14 +4,28 @@
   Wing IDE Pro Keygen GUI 🔑
 </h1>
 
-<h4 align="center">
+<p align="center">
+  <a href="https://github.com/rodriguez-moon/wing-ide-keygen-gui/blob/main/LICENSE">
+    <img alt="license: GPL-3.0" src="https://img.shields.io/github/license/rodriguez-moon/wing-ide-keygen-gui.svg?color=734ad4&logo=github">
+  </a>
+  <a href="https://github.com/rodriguez-moon/wing-ide-keygen-gui/releases">
+    <img alt="GitHub release" src="https://img.shields.io/github/release/rodriguez-moon/wing-ide-keygen-gui.svg?color=38a851&logo=github">
+  <a href="https://python.org">
+    <img alt="python: v3.11" src="https://img.shields.io/badge/python-v3.11-4b8bbe.svg?logo=python&logoColor=ffd43b">
+  </a>
+  <a href="https://github.com/psf/black">
+    <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
+  </a>
+</p>
+
+<h3 align="center">
   License activation code generator for WingWare's
   <a href="https://wingware.com">
     Wing Python IDE
   </a>
   <br/>
   Supported major versions: 5, 6, 7, 8, and 9
-</h4>
+</h3>
 
 <div style="text-align: center;">
     <img title="Wing Keygen GUI" alt="Example GUI screenshot" src="./assets/gui-example.png">
