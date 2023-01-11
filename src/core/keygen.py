@@ -18,6 +18,7 @@ class WingKeygen:
         "Commercial": "CN",
         "Non-Commercial": "EN",
         "Educational": "NN",
+        "Trial/Evaluation": "tN",
     }
     # Untested theory: RW for Windows, RL for Linux, R(M or X?) for MacOS
     request_regex = "^R[LMW][A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
@@ -85,7 +86,7 @@ class WingKeygen:
             return
 
         request_code = obj.request_code.get().upper().strip()
-        license_id = obj.license_id.get().strip()
+        license_id = obj.license_id.get().upper().strip()
 
         if re.match(self.license_regex, license_id) is None:
             tkinter.messagebox.showerror("Error", "Invalid license ID.")

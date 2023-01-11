@@ -2,6 +2,7 @@ import os
 import sys
 import webbrowser
 from tkinter import Event
+import tkinter.messagebox
 
 import customtkinter as ctk
 
@@ -13,7 +14,7 @@ class Application(ctk.CTk, WingKeygen):
         super().__init__()
 
         self.__version__ = "9.0.2"
-        self.__build__ = "2023.01.05"
+        self.__build__ = "2023.01.11"
         self.__github__ = "https://github.com/rodriguez-moon/wing-ide-keygen-gui"
 
         print("[+] Wing IDE Pro Keygen GUI is running!")
@@ -139,6 +140,14 @@ class Application(ctk.CTk, WingKeygen):
         self.about_button._fg_color = self.get_theme("grey")
         self.about_button._draw()
 
+    def update_license(self) -> None:
+        self.license_id.set(self.create_license_id(self.license_selection.get()))
+        if self.license_id.get().strip().upper().startswith("TN"):
+            tkinter.messagebox.showinfo(
+                "Info",
+                "Trial license IDs can be activated in Wing IDE through a bug which disallows the \"T\" initial to be uppercase, but doesn't check if it's lowercase.",
+            )
+
     def create_widgets(self) -> None:
         current_row = 0
         current_col = 0
@@ -179,9 +188,7 @@ class Application(ctk.CTk, WingKeygen):
         self.license_selection.set(next(iter(self.license_types)))
         self.license_type.trace_add(
             "write",
-            lambda *_: self.license_id.set(
-                self.create_license_id(self.license_selection.get())
-            ),
+            lambda *_: self.update_license(),
         )
         current_row += 1
 
