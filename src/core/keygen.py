@@ -19,7 +19,9 @@ class WingKeygen:
         "Non-Commercial": "EN",
         "Educational": "NN",
     }
-    request_regex = "^RW[A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
+    # Untested theory: RW for Windows, RL for Linux, R(M or X?) for MacOS
+    request_regex = "^R[LMW][A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
+    license_regex = "^[TNECYH6][NL][A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
 
     @staticmethod
     def add_hypens(n: int, char: str = "-"):
@@ -83,11 +85,16 @@ class WingKeygen:
             return
 
         request_code = obj.request_code.get().upper().strip()
+        license_id = obj.license_id.get().strip()
+
+        if re.match(self.license_regex, license_id) is None:
+            tkinter.messagebox.showerror("Error", "Invalid license ID.")
+            return
+
         if re.match(self.request_regex, request_code) is None:
             tkinter.messagebox.showerror("Error", "Invalid request code.")
             return
 
-        license_id = obj.license_id.get().strip()
         license_hash = self.get_license_hash(license_id, request_code)
         activation_code = self.get_activation_code(license_hash, version_magic)
 
