@@ -193,11 +193,12 @@ class Application(ctk.CTk, WingKeygen):
             master=self,
             textvariable=self.license_id,
             width=220,
-            state="readonly",
-            fg_color=self.get_theme("readonly"),
         )
         self.license_id_entry.grid(
             padx=5, pady=5, row=current_row, column=current_col + 1
+        )
+        self.license_id_entry.bind(
+            "<Return>", command=lambda event: self.generate_license(self)
         )
         self.license_id.set(self.create_license_id(self.license_selection.get()))
         current_row += 1
