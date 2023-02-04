@@ -1,7 +1,13 @@
+from __future__ import annotations
+
 import hashlib
 import re
 import tkinter.messagebox
 from secrets import SystemRandom
+from typing import TYPE_CHECKING, Any, Callable
+
+if TYPE_CHECKING:
+    from .gui import Application
 
 BASE30 = "123456789ABCDEFGHJKLMNPQRTVWXY"
 
@@ -20,14 +26,14 @@ class WingKeygen:
         "Educational": "NN",
         "Trial/Evaluation": "tN",
     }
-    # Untested theory: RW for Windows, RL for Linux, R(M or X?) for MacOS
-    request_regex = "^R[LMW][A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
-    license_regex = "^[TNECYH6][NL][A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
+    # RW for Windows, RL for Linux, RM for MacOS
+    request_regex = r"^R[LMW][A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
+    license_regex = r"^[TNECYH6][NL][A-HJ-NP-RTV-Y1-9]{3}(-[A-HJ-NP-RTV-Y1-9]{5}){3}$"
 
     @staticmethod
-    def add_hypens(n: int, char: str = "-"):
-        def decorator(func):
-            def wrapper(*args, **kwargs) -> str:
+    def add_hyphens(n: int, char: str = "-") -> Callable[[Any], Any]:
+        def decorator(func: Callable[[Any], Any]) -> Callable[[Any], Any]:
+            def wrapper(*args: Any, **kwargs: Any) -> str:
                 res = func(*args, **kwargs)
                 return char.join(res[i : i + n] for i in range(0, len(res), n))
 
@@ -51,17 +57,17 @@ class WingKeygen:
             part += ord(c)
         return part & 0xFFFFF
 
-    @add_hypens(5)
-    def create_license_id(self, _type: str) -> str:
+    @add_hyphens(5)
+    def create_license_id(self, ltype: str) -> str:
         cryptosecure = SystemRandom()
         license = (
-            self.license_types.get(_type)
+            self.license_types[ltype]
             + cryptosecure.choice(re.subn("[LMW]", "", BASE30)[0])
             + "".join(cryptosecure.choices(BASE30, k=17))
         )
         return license
 
-    @add_hypens(5)
+    @add_hyphens(5)
     def get_license_hash(self, license_id: str, request_id: str) -> str:
         hasher = hashlib.sha1()
         hasher.update(request_id.encode("ascii"))
@@ -69,8 +75,12 @@ class WingKeygen:
         hash_int = int(hasher.hexdigest().upper()[::2], 16)
         return request_id[:3] + self.int_to_b30(hash_int)
 
-    @add_hypens(5)
-    def get_activation_code(self, license_hash: str, version_magic: tuple) -> str:
+    @add_hyphens(5)
+    def get_activation_code(
+        self,
+        license_hash: str,
+        version_magic: tuple[int, int, int, int],
+    ) -> str:
         return "AXX" + self.int_to_b30(
             sum(
                 self.loop(j, license_hash) << i * 20
@@ -78,15 +88,15 @@ class WingKeygen:
             )
         ).ljust(17, "1")
 
-    def generate_license(self, obj):
-        version = obj.version_info.get().strip()
+    def generate_license(self, app: Application) -> None:
+        version = app.version_info.get().strip()
         version_magic = self.version_magics.get(version)
         if version_magic is None:
             tkinter.messagebox.showerror("Error", "Invalid Wing IDE Pro Version.")
             return
 
-        request_code = obj.request_code.get().upper().strip()
-        license_id = obj.license_id.get().upper().strip()
+        request_code = app.request_code.get().upper().strip()
+        license_id = app.license_id.get().upper().strip()
 
         if re.match(self.license_regex, license_id) is None:
             tkinter.messagebox.showerror("Error", "Invalid license ID.")
@@ -103,8 +113,9 @@ class WingKeygen:
         print(f"[*] License ID      : {license_id}")
         print(f"[*] Request Code    : {request_code}")
         print(f"[*] Activation Code : {activation_code}")
-        obj.activation_code.set(activation_code)
+        app.activation_code.set(activation_code)
 
 
 if __name__ == "__main__":
-    raise SystemExit("[x] Please run 'main.py'!")
+    print("[x] Please run 'main.py'!")
+    raise SystemExit(1)
