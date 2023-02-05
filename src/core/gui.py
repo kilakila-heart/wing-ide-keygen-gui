@@ -1,7 +1,6 @@
 import os
 import sys
 import webbrowser
-from tkinter import Event
 import tkinter.messagebox
 
 import customtkinter as ctk
@@ -24,7 +23,7 @@ class Application(ctk.CTk, WingKeygen):
         self.create_widgets()
 
     @staticmethod
-    def get_theme(key: str) -> tuple | None:
+    def get_theme(key: str) -> tuple[str, str] | None:
         # TODO: move to custom "theme.json" file
         colours = {
             "background": ("white", "#37383a"),
@@ -43,20 +42,20 @@ class Application(ctk.CTk, WingKeygen):
 
     @staticmethod
     def get_icon() -> str | None:
-        # TODO: implement cross-platform icons
-        if sys.platform != "win32":
-            return None
-
+        # TODO: implement icon for MacOS
         parent_directory = os.path.abspath(
             os.path.join(sys.argv[0], os.path.pardir, os.path.pardir)
         )
-        icon_path = os.path.join(parent_directory, "assets", "wing.ico")
+        if sys.platform == "win32":
+            icon_path = os.path.join(parent_directory, "assets", "wing.ico")
+        elif sys.platform == "linux":
+            icon_path = "@" + os.path.join(parent_directory, "assets", "wing.xbm")
+        else:
+            return None
         return icon_path
 
     @staticmethod
-    def open_href(event: Event, href: str) -> None:
-        # TODO: modify the widget to give visual response when clicked
-        # widget = event.widget
+    def open_href(href: str) -> None:
         webbrowser.open_new_tab(href)
 
     def close_top_view(self, window: ctk.CTkToplevel) -> None:
@@ -103,7 +102,7 @@ class Application(ctk.CTk, WingKeygen):
         github.grid(padx=5, pady=5, row=current_row, column=current_col, columnspan=2)
         github.bind(
             "<Button-1>",
-            (lambda event, href=self.__github__: self.open_href(event, href)),
+            (lambda event, href=self.__github__: self.open_href(href)),
         )
         variable.set("GitHub Repository")
         current_row += 1
