@@ -1,7 +1,6 @@
 import os
 import sys
 import webbrowser
-from tkinter import Event
 import tkinter.messagebox
 
 import customtkinter as ctk
@@ -43,14 +42,16 @@ class Application(ctk.CTk, WingKeygen):
 
     @staticmethod
     def get_icon() -> str | None:
-        # TODO: implement cross-platform icons
-        if sys.platform != "win32":
-            return None
-
+        # TODO: implement icon for MacOS
         parent_directory = os.path.abspath(
             os.path.join(sys.argv[0], os.path.pardir, os.path.pardir)
         )
-        icon_path = os.path.join(parent_directory, "assets", "wing.ico")
+        if sys.platform == "win32":
+            icon_path = os.path.join(parent_directory, "assets", "wing.ico")
+        elif sys.platform == "linux":
+            icon_path = "@" + os.path.join(parent_directory, "assets", "wing.xbm")
+        else:
+            return None
         return icon_path
 
     @staticmethod
